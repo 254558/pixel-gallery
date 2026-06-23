@@ -3,6 +3,7 @@
 import { LayoutGrid } from "@/components/ui/layout-grid";
 import { DotmSquare17 } from "@/components/ui/dotm-square-17";
 import { useCallback, useEffect, useRef, useState } from "react";
+import PixelBlast from "@/components/PixelBlast";
 
 const IMAGE_EXTS = [".png", ".jpg", ".jpeg", ".webp", ".gif"];
 const PAGE_SIZE = 20;
@@ -106,8 +107,30 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* upload success toast */}
+    <div className="min-h-screen bg-black relative">
+      {/* PixelBlast 背景 */}
+      <div className="fixed inset-0 z-0">
+        <PixelBlast
+          variant="square"
+          pixelSize={4}
+          color="#B497CF"
+          patternScale={2}
+          patternDensity={1}
+          enableRipples
+          rippleSpeed={0.3}
+          rippleThickness={0.1}
+          rippleIntensityScale={1}
+          speed={0.5}
+          transparent
+          edgeFade={0.25}
+          className=""
+          style={{}}
+        />
+      </div>
+
+      {/* 内容层 */}
+      <div className="relative z-10">
+        {/* upload success toast */}
       {uploadMsg && (
         <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-zinc-900 border border-zinc-800 text-green-400 px-5 py-2 rounded-xl shadow-2xl backdrop-blur-sm text-sm animate-in fade-in slide-in-from-top-2 duration-300">
           {uploadMsg}
@@ -166,6 +189,7 @@ export default function Home() {
           )}
         </div>
       )}
+      </div>
     </div>
   );
 }
