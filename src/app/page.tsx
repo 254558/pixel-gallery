@@ -43,12 +43,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black py-12">
-      <header className="text-center mb-12 px-4">
-        <h1 className="text-4xl sm:text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 bg-clip-text text-transparent">
-          📷 图片展示
-        </h1>
-      </header>
-
       <LayoutGrid cards={cards} />
     </div>
   );
