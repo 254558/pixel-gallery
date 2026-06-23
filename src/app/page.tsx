@@ -30,15 +30,6 @@ export default function Home() {
   const visibleCards = allCards.slice(0, visibleCount);
   const hasMore = visibleCount < allCards.length;
 
-  const shuffle = <T,>(arr: T[]): T[] => {
-    const a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  };
-
   const loadImages = () => {
     fetch("/api/images")
       .then((res) => {
@@ -46,10 +37,8 @@ export default function Home() {
         return res.json();
       })
       .then((data: { images: ImageItem[] }) => {
-        const imgs = shuffle(
-          data.images.filter((item) =>
-            IMAGE_EXTS.some((ext) => item.name.toLowerCase().endsWith(ext))
-          )
+        const imgs = data.images.filter((item) =>
+          IMAGE_EXTS.some((ext) => item.name.toLowerCase().endsWith(ext))
         );
         setAllCards(
           imgs.map((item, i) => ({
