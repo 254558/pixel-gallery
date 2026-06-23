@@ -23,6 +23,7 @@ export default function Home() {
   const [allCards, setAllCards] = useState<Card[]>([]);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [uploading, setUploading] = useState(false);
+  const [uploadMsg, setUploadMsg] = useState("");
   const [loaded, setLoaded] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
@@ -89,6 +90,8 @@ export default function Home() {
       const res = await fetch("/api/upload", { method: "POST", body: formData });
       const data = await res.json();
       if (data.success) {
+        setUploadMsg("上传成功");
+        setTimeout(() => setUploadMsg(""), 3000);
         loadImages();
       } else {
         alert(data.error || "上传失败");
@@ -104,6 +107,12 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black">
+      {/* upload success toast */}
+      {uploadMsg && (
+        <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 bg-zinc-900 border border-zinc-800 text-green-400 px-5 py-2 rounded-xl shadow-2xl backdrop-blur-sm text-sm animate-in fade-in slide-in-from-top-2 duration-300">
+          {uploadMsg}
+        </div>
+      )}
       {/* 右上角上传按钮 */}
       <div className="fixed top-4 right-4 z-40">
         <label className="inline-flex items-center gap-1.5 bg-zinc-800 hover:bg-zinc-700 text-white text-sm px-4 py-2 rounded-lg cursor-pointer transition-colors">
