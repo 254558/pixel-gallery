@@ -142,10 +142,8 @@ export default function AdminPage() {
         </div>
         {/* 登录框 */}
         <div className="relative z-10">
-          <div className="relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-blue-500 to-purple-600 rounded-xl blur-xl opacity-30 group-hover:opacity-60 transition duration-500" />
-            <div className="relative bg-zinc-950/80 backdrop-blur-xl p-8 rounded-xl border border-zinc-800/50">
-              <h1 className="text-white text-xl font-semibold mb-6 text-center">管理面板</h1>
+          <div className="relative bg-zinc-950/80 backdrop-blur-xl p-8 rounded-xl border border-zinc-700/50">
+            <h1 className="text-white text-xl font-semibold mb-6 text-center">管理面板</h1>
               <input
                 type="password"
                 placeholder="输入管理密码"
