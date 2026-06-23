@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "📷 图片展示",
-  description: "我的图片展示网站",
+  title: "发呆像素",
+  description: "神游时收集的像素碎片",
   icons: {
     icon: "/favicon.png",
   },
