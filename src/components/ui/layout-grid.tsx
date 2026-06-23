@@ -8,7 +8,13 @@ type Card = {
   thumbnail: string;
 };
 
-export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
+export const LayoutGrid = ({
+  cards,
+  renderOverlay,
+}: {
+  cards: Card[];
+  renderOverlay?: (card: Card) => React.ReactNode;
+}) => {
   const [selected, setSelected] = useState<string | null>(null);
 
   const open = useCallback((src: string) => setSelected(src), []);
@@ -22,10 +28,12 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
         {cards.map((card) => (
           <div
             key={card.id}
-            className="block break-inside-avoid mb-4 cursor-pointer"
-            onClick={() => open(card.thumbnail)}
+            className="block break-inside-avoid mb-4 cursor-pointer group"
           >
-            <div className="relative overflow-hidden rounded-xl bg-white/5">
+            <div
+              className="relative overflow-hidden rounded-xl bg-white/5"
+              onClick={() => open(card.thumbnail)}
+            >
               <img
                 src={card.thumbnail}
                 alt=""
@@ -34,6 +42,15 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
                 style={{ imageRendering: 'pixelated' }}
                 draggable={false}
               />
+              {/* overlay buttons (likes, favorites, comments) */}
+              {renderOverlay && (
+                <div
+                  className="absolute bottom-0 left-0 right-0 p-2.5 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {renderOverlay(card)}
+                </div>
+              )}
             </div>
           </div>
         ))}
