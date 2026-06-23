@@ -29,6 +29,7 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
               <img
                 src={card.thumbnail}
                 alt=""
+                loading="lazy"
                 className="w-full h-auto block"
                 style={{ imageRendering: 'pixelated' }}
                 draggable={false}
