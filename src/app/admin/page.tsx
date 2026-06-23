@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback, useRef, useMemo } from "react";
 
 type PendingItem = {
   file: string;
@@ -20,6 +20,17 @@ export default function AdminPage() {
   const [actionMsg, setActionMsg] = useState("");
   const [tab, setTab] = useState<"pending" | "public">("pending");
   const pwRef = useRef("");
+
+  // 固定星星位置，避免每次 re-render 重新生成
+  const stars = useMemo(() =>
+    Array.from({ length: 120 }).map((_, i) => ({
+      width: Math.random() * 2 + 1,
+      height: Math.random() * 2 + 1,
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      opacity: Math.random() * 0.5 + 0.2,
+    })),
+  []);
 
   const fetchPending = useCallback(async () => {
     try {
@@ -111,19 +122,19 @@ export default function AdminPage() {
   if (!authenticated) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
-        <div className="absolute inset-0">
-          {Array.from({ length: 120 }).map((_, i) => (
-            <div
-              key={i}
-              className="absolute rounded-full bg-white"
-              style={{
-                width: Math.random() * 2 + 1,
-                height: Math.random() * 2 + 1,
-                top: (Math.random() * 100) + "%",
-                left: (Math.random() * 100) + "%",
-                opacity: Math.random() * 0.5 + 0.2,
-              }}
-            />
+	        <div className="absolute inset-0">
+	          {stars.map((s, i) => (
+	            <div
+	              key={i}
+	              className="absolute rounded-full bg-white"
+	              style={{
+	                width: s.width,
+	                height: s.height,
+	                top: s.top + "%",
+	                left: s.left + "%",
+	                opacity: s.opacity,
+	              }}
+	            />
           ))}
         </div>
         <div className="relative z-10">
