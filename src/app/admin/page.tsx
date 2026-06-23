@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
+import ShapeGrid from "@/components/ui/ShapeGrid";
 
 type PendingItem = {
   file: string;
@@ -111,23 +112,20 @@ export default function AdminPage() {
   if (!authenticated) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
+        {/* animated grid background */}
         <div className="absolute inset-0">
-          {Array.from({ length: 120 }).map((_, i) => (
-            <div
-              key={i}
-              className="absolute rounded-full bg-white"
-              style={{
-                width: Math.random() * 2 + 1,
-                height: Math.random() * 2 + 1,
-                top: (Math.random() * 100) + "%",
-                left: (Math.random() * 100) + "%",
-                opacity: Math.random() * 0.5 + 0.2,
-              }}
-            />
-          ))}
+          <ShapeGrid
+            direction="diagonal"
+            speed={0.3}
+            borderColor="rgba(255,255,255,0.08)"
+            squareSize={50}
+            hoverFillColor="rgba(255,255,255,0.04)"
+            shape="circle"
+          />
         </div>
+        {/* login card */}
         <div className="relative z-10">
-          <div className="bg-zinc-950 backdrop-blur-xl p-8 rounded-xl border border-zinc-700">
+          <div className="bg-zinc-950/90 backdrop-blur-xl p-8 rounded-xl border border-zinc-700/50">
             <h1 className="text-white text-xl font-semibold mb-6 text-center">管理面板</h1>
             <input
               type="password"
