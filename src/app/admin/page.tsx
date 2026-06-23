@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
+import { ShootingStars } from "@/components/ui/shooting-stars";
 
 type PendingItem = {
   file: string;
@@ -112,25 +113,54 @@ export default function AdminPage() {
 
   if (!authenticated) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="relative group">
-          <div className="absolute -inset-1 bg-gradient-to-r from-zinc-600 via-zinc-500 to-zinc-600 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-300" />
-          <div className="relative bg-zinc-950 p-8 rounded-xl border border-zinc-800">
-            <h1 className="text-white text-xl font-semibold mb-6 text-center">管理员登录</h1>
-            <input
-              type="password"
-              placeholder="输入管理密码"
-              className="bg-zinc-900 text-white px-4 py-2.5 rounded-lg w-full mb-4 border border-zinc-800 focus:border-zinc-500 focus:outline-none transition-colors"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+      <div className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
+        {/* 流星背景 */}
+        <ShootingStars
+          minSpeed={15}
+          maxSpeed={25}
+          minDelay={800}
+          maxDelay={3000}
+          starColor="#9E00FF"
+          trailColor="#2EB9DF"
+          starWidth={12}
+        />
+        {/* 星空背景点 */}
+        <div className="absolute inset-0">
+          {Array.from({ length: 120 }).map((_, i) => (
+            <div
+              key={i}
+              className="absolute rounded-full bg-white"
+              style={{
+                width: Math.random() * 2 + 1,
+                height: Math.random() * 2 + 1,
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+                opacity: Math.random() * 0.5 + 0.2,
+              }}
             />
-            <button
-              className="w-full bg-white text-black font-medium px-6 py-2.5 rounded-lg hover:bg-zinc-200 transition-colors"
-              onClick={handleLogin}
-            >
-              进入
-            </button>
+          ))}
+        </div>
+        {/* 登录框 */}
+        <div className="relative z-10">
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 via-blue-500 to-purple-600 rounded-xl blur-xl opacity-30 group-hover:opacity-60 transition duration-500" />
+            <div className="relative bg-zinc-950/80 backdrop-blur-xl p-8 rounded-xl border border-zinc-800/50">
+              <h1 className="text-white text-xl font-semibold mb-6 text-center">管理面板</h1>
+              <input
+                type="password"
+                placeholder="输入管理密码"
+                className="bg-zinc-900/80 text-white px-4 py-2.5 rounded-lg w-full mb-4 border border-zinc-800 focus:border-zinc-500 focus:outline-none transition-colors"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+              />
+              <button
+                className="w-full bg-white text-black font-medium px-6 py-2.5 rounded-lg hover:bg-zinc-200 transition-colors"
+                onClick={handleLogin}
+              >
+                进入
+              </button>
+            </div>
           </div>
         </div>
       </div>
