@@ -18,6 +18,7 @@ export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
   const [actionMsg, setActionMsg] = useState("");
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [tab, setTab] = useState<"pending" | "public">("pending");
   const pwRef = useRef("");
 
@@ -207,7 +208,10 @@ export default function AdminPage() {
                     key={item.file}
                     className="group relative bg-zinc-900/50 rounded-3xl overflow-hidden border border-zinc-800/50 hover:border-zinc-700/50 transition-all duration-500"
                   >
-                    <div className="aspect-[4/3] bg-zinc-800 overflow-hidden">
+                    <div
+                      className="aspect-[4/3] bg-zinc-800 overflow-hidden cursor-pointer"
+                      onClick={() => setSelectedImage("/api/uploads/" + item.file)}
+                    >
                       <img
                         src={"/api/uploads/" + item.file}
                         alt={item.file}
@@ -260,7 +264,10 @@ export default function AdminPage() {
                     key={item.name}
                     className="group relative bg-zinc-900/50 rounded-3xl overflow-hidden border border-zinc-800/50 hover:border-zinc-700/50 transition-all duration-500"
                   >
-                    <div className="aspect-[4/3] bg-zinc-800 overflow-hidden">
+                    <div
+                      className="aspect-[4/3] bg-zinc-800 overflow-hidden cursor-pointer"
+                      onClick={() => setSelectedImage(item.url)}
+                    >
                       <img
                         src={item.url}
                         alt={item.name}
@@ -294,6 +301,21 @@ export default function AdminPage() {
               </div>
             )}
           </>
+        )}
+
+        {/* 全屏预览 */}
+        {selectedImage && (
+          <div
+            className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center cursor-zoom-out"
+            onClick={() => setSelectedImage(null)}
+          >
+            <img
+              src={selectedImage}
+              alt="preview"
+              className="max-w-[95vw] max-h-[95vh] object-contain"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
         )}
       </div>
     </div>
