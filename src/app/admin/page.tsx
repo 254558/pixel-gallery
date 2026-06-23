@@ -39,8 +39,18 @@ export default function AdminPage() {
       });
   }, []);
 
-  const handleLogin = () => {
-    setAuthenticated(true);
+  const handleLogin = async () => {
+    // 用 test-ping 验证密码
+    const res = await fetch("/api/review", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-admin-password": password },
+      body: JSON.stringify({ action: "ping" }),
+    });
+    if (res.ok) {
+      setAuthenticated(true);
+    } else {
+      alert("密码错误");
+    }
   };
 
   const handleReview = async (file: string, action: "approve" | "reject") => {

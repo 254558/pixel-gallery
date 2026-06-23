@@ -15,6 +15,11 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const { file, action } = body;
 
+  // ping 用于密码验证
+  if (action === "ping") {
+    return NextResponse.json({ success: true });
+  }
+
   if (!file || !["approve", "reject"].includes(action)) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
