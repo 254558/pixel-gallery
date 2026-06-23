@@ -4,14 +4,19 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "sync-images": "find public/ -maxdepth 1 -type f \\( -name '*.png' -o -name '*.webp' -o -name '*.gif' -o -name '*.jpg' -o -name '*.jpeg' \\) -delete 2>/dev/null; find /Users/zhangshuai/Desktop/pic/ -maxdepth 1 -type f \\( -name '*.png' -o -name '*.webp' -o -name '*.gif' -o -name '*.jpg' -o -name '*.jpeg' \\) -exec cp {} public/ \\; 2>/dev/null; echo 'synced'",
+    "dev:sync": "pnpm sync-images && next dev",
+    "build": "pnpm sync-images && next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "clsx": "^2.1.1",
+    "motion": "^12.40.0",
     "next": "16.2.9",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
