@@ -208,20 +208,18 @@ export default function AdminPage() {
                     key={item.file}
                     className="group relative bg-zinc-900/50 rounded-3xl overflow-hidden border border-zinc-800/50 hover:border-zinc-700/50 transition-all duration-500"
                   >
-                    <div
-                      className="aspect-[4/3] bg-zinc-800 overflow-hidden cursor-pointer"
-                      onClick={() => setSelectedImage("/api/uploads/" + item.file)}
-                    >
+                    <div className="aspect-[4/3] bg-zinc-800 overflow-hidden">
                       <img
                         src={"/api/uploads/" + item.file}
                         alt={item.file}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 cursor-pointer"
                         style={{ imageRendering: "pixelated" }}
+                        onClick={() => setSelectedImage("/api/uploads/" + item.file)}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                     </div>
 
-                    <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-0 group-hover:-translate-y-1 transition-transform duration-300">
+                    <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-0 group-hover:-translate-y-1 transition-transform duration-300 pointer-events-none">
                       <p className="text-sm text-white/90 truncate font-medium drop-shadow-lg">
                         {item.file}
                       </p>
@@ -230,16 +228,16 @@ export default function AdminPage() {
                       </p>
                     </div>
 
-                    <div className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-500 scale-90 group-hover:scale-100">
+                    <div className="absolute inset-0 flex items-center justify-center gap-3">
                       <button
-                        className="bg-green-500/90 hover:bg-green-500 text-white text-sm font-medium px-5 py-2 rounded-2xl backdrop-blur-sm transition-all hover:scale-105 active:scale-95"
-                        onClick={() => handleReview(item.file, "approve")}
+                        className="bg-green-500/90 hover:bg-green-500 text-white text-sm font-medium px-5 py-2 rounded-2xl backdrop-blur-sm transition-all hover:scale-105 active:scale-95 opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-90 group-hover:scale-100"
+                        onClick={(e) => { e.stopPropagation(); handleReview(item.file, "approve"); }}
                       >
                         通过
                       </button>
                       <button
-                        className="bg-red-500/90 hover:bg-red-500 text-white text-sm font-medium px-5 py-2 rounded-2xl backdrop-blur-sm transition-all hover:scale-105 active:scale-95"
-                        onClick={() => handleReview(item.file, "reject")}
+                        className="bg-red-500/90 hover:bg-red-500 text-white text-sm font-medium px-5 py-2 rounded-2xl backdrop-blur-sm transition-all hover:scale-105 active:scale-95 opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-90 group-hover:scale-100"
+                        onClick={(e) => { e.stopPropagation(); handleReview(item.file, "reject"); }}
                       >
                         拒绝
                       </button>
@@ -264,29 +262,27 @@ export default function AdminPage() {
                     key={item.name}
                     className="group relative bg-zinc-900/50 rounded-3xl overflow-hidden border border-zinc-800/50 hover:border-zinc-700/50 transition-all duration-500"
                   >
-                    <div
-                      className="aspect-[4/3] bg-zinc-800 overflow-hidden cursor-pointer"
-                      onClick={() => setSelectedImage(item.url)}
-                    >
+                    <div className="aspect-[4/3] bg-zinc-800 overflow-hidden">
                       <img
                         src={item.url}
                         alt={item.name}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 cursor-pointer"
                         style={{ imageRendering: "pixelated" }}
+                        onClick={() => setSelectedImage(item.url)}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                     </div>
 
-                    <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-0 group-hover:-translate-y-1 transition-transform duration-300">
+                    <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-0 group-hover:-translate-y-1 transition-transform duration-300 pointer-events-none">
                       <p className="text-sm text-white/90 truncate font-medium drop-shadow-lg">
                         {item.name}
                       </p>
                     </div>
 
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 scale-90 group-hover:scale-100">
+                    <div className="absolute inset-0 flex items-center justify-center">
                       <button
-                        className="bg-white/10 hover:bg-red-500/80 backdrop-blur-md text-white text-sm font-medium px-6 py-2.5 rounded-2xl border border-white/20 hover:border-red-400/50 transition-all hover:scale-105 active:scale-95"
-                        onClick={() => handleDelete(item.name)}
+                        className="bg-white/10 hover:bg-red-500/80 backdrop-blur-md text-white text-sm font-medium px-6 py-2.5 rounded-2xl border border-white/20 hover:border-red-400/50 transition-all hover:scale-105 active:scale-95 opacity-0 group-hover:opacity-100 transition-opacity duration-500 scale-90 group-hover:scale-100"
+                        onClick={(e) => { e.stopPropagation(); handleDelete(item.name); }}
                       >
                         <span className="flex items-center gap-2">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
