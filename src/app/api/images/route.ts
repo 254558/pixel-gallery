@@ -14,46 +14,49 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 export async function GET() {
-  // 非 Vercel 环境直接走本地文件
+  let images: { name: string; url: string }[] = [];
+
   if (!process.env.VERCEL) {
     try {
       const fs = await import("fs");
       const path = await import("path");
       const dir = path.join(process.cwd(), "public");
       const files = fs.readdirSync(dir);
-      const images = shuffle(
-        files
-          .filter((file) =>
-            IMAGE_EXTENSIONS.some((ext) => file.toLowerCase().endsWith(ext))
-          )
-          .map((name) => ({
-            name,
-            url: `/${name}`,
-          }))
-      ).map((item, i) => ({ ...item, index: i + 1 }));
-      return NextResponse.json({ images });
+      images = files
+        .filter((file) =>
+          IMAGE_EXTENSIONS.some((ext) => file.toLowerCase().endsWith(ext))
+        )
+        .map((name) => ({
+          name,
+          url: `/${name}`,
+        }));
     } catch {
-      return NextResponse.json({ images: [] });
+      // fall through
     }
-  }
-
-  // Vercel 环境：从 Blob 读取
-  try {
-    const { blobs } = await list({ prefix: "public/" });
-    const images = shuffle(
-      blobs
+  } else {
+    try {
+      const { blobs } = await list({ prefix: "public/" });
+      images = blobs
         .filter((b) =>
           IMAGE_EXTENSIONS.some((ext) => b.pathname.toLowerCase().endsWith(ext))
         )
         .map((b) => ({
           name: b.pathname.replace("public/", ""),
           url: b.url,
-        }))
-    ).map((item, i) => ({ ...item, index: i + 1 }));
-    return NextResponse.json({ images });
-  } catch {
-    return NextResponse.json({ images: [] });
+        }));
+    } catch {
+      // fall through
+    }
   }
+
+  // 按文件名排序，保证前后端编号一致
+  images.sort((a, b) => a.name.localeCompare(b.name));
+  const withIndex = images.map((item, i) => ({ ...item, index: i + 1 }));
+
+  // 打乱顺序用于瀑布流展示，但 index 保持不变
+  const shuffled = shuffle(withIndex);
+
+  return NextResponse.json({ images: shuffled });
 }
 
 export const runtime = "nodejs";

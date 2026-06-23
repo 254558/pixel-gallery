@@ -46,8 +46,8 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
           onClick={close}
         >
           <div className="relative flex items-center justify-center">
-            {/* 编号 */}
-            <div className="absolute -left-10 top-1/2 -translate-y-1/2 text-zinc-500 text-lg font-mono select-none pointer-events-none">
+            {/* 编号：右下角，半透明，小字 */}
+            <div className="absolute bottom-3 right-3 text-zinc-500/60 text-xs font-mono select-none pointer-events-none">
               #{selected.index}
             </div>
             <img
