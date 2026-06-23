@@ -5,6 +5,11 @@ import { useEffect, useState } from "react";
 
 const IMAGE_EXTS = [".png", ".jpg", ".jpeg", ".webp", ".gif"];
 
+type ImageItem = {
+  name: string;
+  url: string;
+};
+
 type Card = {
   id: number;
   content: string;
@@ -19,16 +24,16 @@ export default function Home() {
   const loadImages = () => {
     fetch("/api/images")
       .then((res) => res.json())
-      .then((data: { images: string[] }) => {
-        const imgs = data.images.filter((name) =>
-          IMAGE_EXTS.some((ext) => name.toLowerCase().endsWith(ext))
+      .then((data: { images: ImageItem[] }) => {
+        const imgs = data.images.filter((item) =>
+          IMAGE_EXTS.some((ext) => item.name.toLowerCase().endsWith(ext))
         );
         setCards(
-          imgs.map((name, i) => ({
+          imgs.map((item, i) => ({
             id: i + 1,
-            content: name,
+            content: item.name,
             className: "",
-            thumbnail: `/${name}`,
+            thumbnail: item.url,
           }))
         );
       });

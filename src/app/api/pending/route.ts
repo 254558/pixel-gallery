@@ -1,14 +1,20 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-
-const PENDING_FILE = path.join(process.cwd(), "data", "pending.json");
+import { list } from "@vercel/blob";
 
 export async function GET() {
   try {
-    const data = JSON.parse(fs.readFileSync(PENDING_FILE, "utf-8"));
-    return NextResponse.json({ pending: data });
+    const { blobs } = await list({ prefix: "pending/" });
+    // 过滤掉 pending-meta.json 这样的元数据文件
+    const pending = blobs
+      .filter((b) => b.pathname !== "pending-meta.json" && b.pathname !== "pending/")
+      .map((b) => ({
+        file: b.pathname.replace("pending/", ""),
+        uploadedAt: b.uploadedAt.toISOString(),
+      }));
+    return NextResponse.json({ pending });
   } catch {
     return NextResponse.json({ pending: [] });
   }
 }
+
+export const runtime = "nodejs";

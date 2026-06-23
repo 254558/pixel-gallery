@@ -4,13 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "sync-images": "find public/ -maxdepth 1 -type f \\( -name '*.png' -o -name '*.webp' -o -name '*.gif' -o -name '*.jpg' -o -name '*.jpeg' \\) -delete 2>/dev/null; find /Users/zhangshuai/Desktop/pic/ -maxdepth 1 -type f \\( -name '*.png' -o -name '*.webp' -o -name '*.gif' -o -name '*.jpg' -o -name '*.jpeg' \\) -exec cp {} public/ \\; 2>/dev/null; echo 'synced'",
-    "dev:sync": "pnpm sync-images && next dev",
-    "build": "pnpm sync-images && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "@vercel/blob": "^2.4.1",
     "clsx": "^2.1.1",
     "motion": "^12.40.0",
     "next": "16.2.9",
