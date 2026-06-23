@@ -20,7 +20,16 @@ export default function AdminPage() {
   const [actionMsg, setActionMsg] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [tab, setTab] = useState<"pending" | "public">("pending");
+  const [search, setSearch] = useState("");
   const pwRef = useRef("");
+
+  const filteredPublic = useMemo(() => {
+    if (!search) return publicImages;
+    const q = search.trim().toLowerCase();
+    return publicImages.filter((item) =>
+      item.name.toLowerCase().includes(q)
+    );
+  }, [publicImages, search]);
 
   // 固定星星位置，避免每次 re-render 重新生成
   const stars = useMemo(() =>
@@ -190,7 +199,7 @@ export default function AdminPage() {
           >
             已公开
             <span className="ml-2 bg-zinc-700 text-zinc-300 text-xs px-1.5 py-0.5 rounded-full">
-              {publicImages.length}
+              {search ? filteredPublic.length : publicImages.length}
             </span>
           </button>
         </div>
@@ -251,13 +260,26 @@ export default function AdminPage() {
 
         {tab === "public" && (
           <>
-            {publicImages.length === 0 ? (
+            {/* 搜索框 */}
+            <div className="mb-6">
+              <input
+                type="text"
+                placeholder="搜索图片名称…"
+                className="w-full max-w-md bg-zinc-900/80 text-white px-5 py-3 rounded-2xl border border-zinc-800 focus:border-zinc-500 focus:outline-none transition-colors"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+
+            {filteredPublic.length === 0 ? (
               <div className="text-center py-20">
-                <p className="text-zinc-600 text-lg">暂无已公开图片</p>
+                <p className="text-zinc-600 text-lg">
+                  {search ? "没有匹配的图片" : "暂无已公开图片"}
+                </p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                {publicImages.map((item) => (
+                {filteredPublic.map((item) => (
                   <div
                     key={item.name}
                     className="group relative bg-zinc-900/50 rounded-3xl overflow-hidden border border-zinc-800/50 hover:border-zinc-700/50 transition-all duration-500"

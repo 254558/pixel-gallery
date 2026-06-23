@@ -10,9 +10,16 @@ type Card = {
 
 export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
   const [selected, setSelected] = useState<string | null>(null);
+  const [selectedName, setSelectedName] = useState<string>("");
 
-  const open = useCallback((src: string) => setSelected(src), []);
-  const close = useCallback(() => setSelected(null), []);
+  const open = useCallback((src: string, name: string) => {
+    setSelected(src);
+    setSelectedName(name);
+  }, []);
+  const close = useCallback(() => {
+    setSelected(null);
+    setSelectedName("");
+  }, []);
 
   if (cards.length === 0) return null;
 
@@ -23,7 +30,7 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
           <div
             key={card.id}
             className="block break-inside-avoid mb-4 cursor-pointer"
-            onClick={() => open(card.thumbnail)}
+            onClick={() => open(card.thumbnail, card.content)}
           >
             <div className="relative overflow-hidden rounded-xl bg-white/5">
               <img
@@ -44,16 +51,22 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
           className="fixed inset-0 z-50 bg-black flex items-center justify-center cursor-pointer"
           onClick={close}
         >
-          <img
-            src={selected}
-            alt=""
-            className="max-w-[95vw] max-h-[95vh] w-[95vw] h-[95vh] object-contain"
-            style={{ imageRendering: 'pixelated' }}
-            onClick={(e) => {
-              e.stopPropagation();
-              close();
-            }}
-          />
+          <div className="relative">
+            <img
+              src={selected}
+              alt=""
+              className="max-w-[95vw] max-h-[95vh] w-[95vw] h-[95vh] object-contain"
+              style={{ imageRendering: 'pixelated' }}
+              onClick={(e) => {
+                e.stopPropagation();
+                close();
+              }}
+            />
+            {/* 左下角文件名 */}
+            <div className="absolute bottom-4 left-4 text-zinc-400 text-xs font-mono select-none pointer-events-none">
+              {selectedName}
+            </div>
+          </div>
         </div>
       )}
     </>
