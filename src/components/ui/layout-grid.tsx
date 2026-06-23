@@ -30,6 +30,7 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
                 src={card.thumbnail}
                 alt=""
                 className="w-full h-auto block"
+                style={{ imageRendering: 'pixelated' }}
                 draggable={false}
               />
             </div>
@@ -45,7 +46,8 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
           <img
             src={selected}
             alt=""
-            className="max-w-[95vw] max-h-[95vh] object-contain"
+            className="max-w-[95vw] max-h-[95vh] w-[95vw] h-[95vh] object-contain"
+            style={{ imageRendering: 'pixelated' }}
             onClick={(e) => {
               e.stopPropagation();
               close();
