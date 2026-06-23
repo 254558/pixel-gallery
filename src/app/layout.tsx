@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "📷 图片展示",
   description: "我的图片展示网站",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
