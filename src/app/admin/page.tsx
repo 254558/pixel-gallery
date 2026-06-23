@@ -20,7 +20,22 @@ export default function AdminPage() {
   const [actionMsg, setActionMsg] = useState("");
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [tab, setTab] = useState<"pending" | "public">("pending");
+  const [search, setSearch] = useState("");
   const pwRef = useRef("");
+
+  // 搜索过滤后的已公开图片
+  const filteredPublic = useMemo(() => {
+    if (!search) return publicImages;
+    const q = search.trim();
+    const numMatch = q.match(/^#(\d+)$/);
+    if (numMatch) {
+      const n = Number(numMatch[1]);
+      return publicImages.filter((_, i) => i + 1 === n);
+    }
+    return publicImages.filter((item) =>
+      item.name.toLowerCase().includes(q.toLowerCase())
+    );
+  }, [publicImages, search]);
 
   // 固定星星位置，避免每次 re-render 重新生成
   const stars = useMemo(() =>
@@ -195,6 +210,17 @@ export default function AdminPage() {
           </button>
         </div>
 
+        {/* 搜索框 */}
+        <div className="mb-6">
+          <input
+            type="text"
+            placeholder="搜索文件名或编号（如 #12）…"
+            className="w-full max-w-md bg-zinc-900/60 border border-zinc-800 text-white px-4 py-2.5 rounded-2xl focus:border-zinc-500 focus:outline-none transition-colors text-sm"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
         {tab === "pending" && (
           <>
             {pending.length === 0 ? (
@@ -251,18 +277,22 @@ export default function AdminPage() {
 
         {tab === "public" && (
           <>
-            {publicImages.length === 0 ? (
+            {filteredPublic.length === 0 ? (
               <div className="text-center py-20">
                 <p className="text-zinc-600 text-lg">暂无已公开图片</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                {publicImages.map((item) => (
+                {filteredPublic.map((item) => (
                   <div
                     key={item.name}
                     className="group relative bg-zinc-900/50 rounded-3xl overflow-hidden border border-zinc-800/50 hover:border-zinc-700/50 transition-all duration-500"
                   >
-                    <div className="aspect-[4/3] bg-zinc-800 overflow-hidden">
+                    <div className="aspect-[4/3] bg-zinc-800 overflow-hidden relative">
+                      {/* 序号角标 */}
+                      <span className="absolute top-2 left-2 z-10 bg-black/60 text-zinc-300 text-xs font-mono px-1.5 py-0.5 rounded-md pointer-events-none">
+                        #{publicImages.indexOf(item) + 1}
+                      </span>
                       <img
                         src={item.url}
                         alt={item.name}
