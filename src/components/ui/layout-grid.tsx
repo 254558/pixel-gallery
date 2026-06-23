@@ -62,8 +62,20 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
                 close();
               }}
             />
-            {/* 左下角文件名 */}
-            <div className="absolute bottom-4 left-4 text-zinc-400 text-xs font-mono select-none pointer-events-none">
+            {/* 左下角文件名，点击复制 */}
+            <div
+              className="absolute bottom-4 left-4 text-zinc-400 text-xs font-mono select-none cursor-pointer hover:text-white transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigator.clipboard.writeText(selectedName).then(() => {
+                  // 简单反馈：文字闪一下白色
+                  const el = e.currentTarget;
+                  el.style.color = "#fff";
+                  setTimeout(() => { el.style.color = ""; }, 400);
+                });
+              }}
+              title="点击复制文件名"
+            >
               {selectedName}
             </div>
           </div>
