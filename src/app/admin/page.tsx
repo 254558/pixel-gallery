@@ -28,23 +28,14 @@ export default function AdminPage() {
     if (authenticated) fetchPending();
   }, [authenticated, fetchPending]);
 
-  // 恢复 session 或检查是否无需密码
+  // 恢复 session
   useEffect(() => {
     const saved = sessionStorage.getItem("admin_pw");
     if (saved) {
       pwRef.current = saved;
       setPassword(saved);
       setAuthenticated(true);
-      return;
     }
-    // 没有密码保护，直接进入
-    fetch("/api/pending")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.pending !== undefined) {
-          setAuthenticated(true);
-        }
-      });
   }, []);
 
   const handleLogin = async () => {
