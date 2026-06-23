@@ -1,6 +1,7 @@
 "use client";
 
 import { LayoutGrid } from "@/components/ui/layout-grid";
+import { DotmSquare1 } from "@/components/ui/loader/dotm-square-1";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const IMAGE_EXTS = [".png", ".jpg", ".jpeg", ".webp", ".gif"];
@@ -134,25 +135,17 @@ export default function Home() {
 
       {!loaded ? (
         <div className="min-h-screen flex items-center justify-center">
-          {/* 像素风 Half Helix 加载动画 */}
-          <div className="grid grid-cols-5 gap-[3px]" aria-label="加载中">
-            {Array.from({ length: 25 }).map((_, i) => {
-              const row = Math.floor(i / 5);
-              const col = i % 5;
-              const delay = ((row + col) * 0.12 + (row % 2) * 0.3).toFixed(2);
-              return (
-                <div
-                  key={i}
-                  className="w-[6px] h-[6px] rounded-sm bg-zinc-400"
-                  style={{
-                    animation: `dmx-loading 1.2s ease-in-out infinite`,
-                    animationDelay: `${delay}s`,
-                    opacity: 0.08,
-                  }}
-                />
-              );
-            })}
-          </div>
+          <DotmSquare1
+            size={140}
+            dotSize={8}
+            speed={1.1}
+            pattern="full"
+            animated
+            opacityBase={0.12}
+            opacityMid={0.42}
+            opacityPeak={1}
+            className="text-zinc-400"
+          />
         </div>
       ) : visibleCards.length === 0 ? (
         <div className="min-h-screen flex items-center justify-center">
