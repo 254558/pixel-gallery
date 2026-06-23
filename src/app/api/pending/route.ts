@@ -1,12 +1,17 @@
 import { NextResponse } from "next/server";
-import { list } from "@vercel/blob";
 
 export async function GET() {
+  // 非 Vercel 环境：没有待审核（本地直接上传到 public/，无需审核）
+  if (!process.env.VERCEL) {
+    return NextResponse.json({ pending: [] });
+  }
+
+  // Vercel：从 Blob 列出 pending/ 前缀的文件
   try {
+    const { list } = await import("@vercel/blob");
     const { blobs } = await list({ prefix: "pending/" });
-    // 过滤掉 pending-meta.json 这样的元数据文件
     const pending = blobs
-      .filter((b) => b.pathname !== "pending-meta.json" && b.pathname !== "pending/")
+      .filter((b) => b.pathname !== "pending/")
       .map((b) => ({
         file: b.pathname.replace("pending/", ""),
         uploadedAt: b.uploadedAt.toISOString(),

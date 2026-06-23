@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { copy, del } from "@vercel/blob";
-import path from "path";
 
 export async function POST(req: NextRequest) {
+  // 非 Vercel 环境：本地无需审核
+  if (!process.env.VERCEL) {
+    return NextResponse.json({ success: true });
+  }
+
   const password = req.headers.get("x-admin-password");
   const adminPassword = process.env.ADMIN_PASSWORD;
   if (adminPassword && password !== adminPassword) {
@@ -16,17 +19,17 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   }
 
+  const { copy, del } = await import("@vercel/blob");
+  const path = await import("path");
   const safeName = path.basename(file);
 
   if (action === "approve") {
-    // 复制到 public/ 前缀
     await copy(`pending/${safeName}`, `public/${safeName}`, {
       access: "public",
       addRandomSuffix: false,
     });
   }
 
-  // 从 pending 删除
   await del(`pending/${safeName}`);
 
   return NextResponse.json({ success: true });

@@ -4,19 +4,8 @@ import { list } from "@vercel/blob";
 const IMAGE_EXTENSIONS = [".png", ".jpg", ".jpeg", ".webp", ".gif"];
 
 export async function GET() {
-  try {
-    const { blobs } = await list({ prefix: "public/" });
-    const images = blobs
-      .filter((b) =>
-        IMAGE_EXTENSIONS.some((ext) => b.pathname.toLowerCase().endsWith(ext))
-      )
-      .map((b) => ({
-        name: b.pathname.replace("public/", ""),
-        url: b.url, // Blob 公开 URL
-      }));
-    return NextResponse.json({ images });
-  } catch {
-    // 降级：读取本地 public/ 目录（开发环境或未配置 Blob 时）
+  // 非 Vercel 环境直接走本地文件
+  if (!process.env.VERCEL) {
     try {
       const fs = await import("fs");
       const path = await import("path");
@@ -34,6 +23,22 @@ export async function GET() {
     } catch {
       return NextResponse.json({ images: [] });
     }
+  }
+
+  // Vercel 环境：从 Blob 读取
+  try {
+    const { blobs } = await list({ prefix: "public/" });
+    const images = blobs
+      .filter((b) =>
+        IMAGE_EXTENSIONS.some((ext) => b.pathname.toLowerCase().endsWith(ext))
+      )
+      .map((b) => ({
+        name: b.pathname.replace("public/", ""),
+        url: b.url,
+      }));
+    return NextResponse.json({ images });
+  } catch {
+    return NextResponse.json({ images: [] });
   }
 }
 

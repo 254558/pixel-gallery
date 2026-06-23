@@ -22,9 +22,15 @@ export default function Home() {
   const [uploading, setUploading] = useState(false);
 
   const loadImages = () => {
+    console.log("[loadImages] fetching /api/images...");
     fetch("/api/images")
-      .then((res) => res.json())
+      .then((res) => {
+        console.log("[loadImages] res.ok:", res.ok, "status:", res.status);
+        if (!res.ok) throw new Error("Failed to fetch");
+        return res.json();
+      })
       .then((data: { images: ImageItem[] }) => {
+        console.log("[loadImages] got images:", data.images.length);
         const imgs = data.images.filter((item) =>
           IMAGE_EXTS.some((ext) => item.name.toLowerCase().endsWith(ext))
         );
@@ -36,6 +42,10 @@ export default function Home() {
             thumbnail: item.url,
           }))
         );
+      })
+      .catch((err) => {
+        console.error("[loadImages] error:", err);
+        setCards([]);
       });
   };
 

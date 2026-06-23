@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { put } from "@vercel/blob";
 import crypto from "crypto";
+import fs from "fs";
+import path from "path";
 
 const ALLOWED_EXTENSIONS = [".png", ".jpg", ".jpeg", ".webp", ".gif"];
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -22,17 +23,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "File too large (max 10MB)" }, { status: 400 });
   }
 
-  // 生成唯一文件名（含随机数，防猜测）
   const uniqueName = `${Date.now()}-${crypto.randomBytes(8).toString("hex")}${ext}`;
   const buffer = Buffer.from(await file.arrayBuffer());
 
-  // 上传到 Blob，以 pending/ 前缀标识待审核
-  const result = await put(`pending/${uniqueName}`, buffer, {
-    access: "public",
-    addRandomSuffix: false,
-  });
-
-  return NextResponse.json({ success: true, file: uniqueName, url: result.url });
+  if (process.env.VERCEL) {
+    // Vercel: 上传到 Blob
+    const { put } = await import("@vercel/blob");
+    const result = await put(`pending/${uniqueName}`, buffer, {
+      access: "public",
+      addRandomSuffix: false,
+    });
+    return NextResponse.json({ success: true, file: uniqueName, url: result.url });
+  } else {
+    // 本地开发：存到本地目录
+    const uploadsDir = path.join(process.cwd(), "public");
+    fs.writeFileSync(path.join(uploadsDir, uniqueName), buffer);
+    return NextResponse.json({ success: true, file: uniqueName });
+  }
 }
 
 export const runtime = "nodejs";
