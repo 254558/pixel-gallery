@@ -1,9 +1,10 @@
 "use client";
 
 import { LayoutGrid } from "@/components/ui/layout-grid";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const IMAGE_EXTS = [".png", ".jpg", ".jpeg", ".webp", ".gif"];
+const PAGE_SIZE = 20;
 
 type ImageItem = {
   name: string;
@@ -18,23 +19,26 @@ type Card = {
 };
 
 export default function Home() {
-  const [cards, setCards] = useState<Card[]>([]);
+  const [allCards, setAllCards] = useState<Card[]>([]);
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [uploading, setUploading] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  const visibleCards = allCards.slice(0, visibleCount);
+  const hasMore = visibleCount < allCards.length;
 
   const loadImages = () => {
-    console.log("[loadImages] fetching /api/images...");
     fetch("/api/images")
       .then((res) => {
-        console.log("[loadImages] res.ok:", res.ok, "status:", res.status);
         if (!res.ok) throw new Error("Failed to fetch");
         return res.json();
       })
       .then((data: { images: ImageItem[] }) => {
-        console.log("[loadImages] got images:", data.images.length);
         const imgs = data.images.filter((item) =>
           IMAGE_EXTS.some((ext) => item.name.toLowerCase().endsWith(ext))
         );
-        setCards(
+        setAllCards(
           imgs.map((item, i) => ({
             id: i + 1,
             content: item.name,
@@ -42,16 +46,35 @@ export default function Home() {
             thumbnail: item.url,
           }))
         );
+        setLoaded(true);
       })
-      .catch((err) => {
-        console.error("[loadImages] error:", err);
-        setCards([]);
+      .catch(() => {
+        setAllCards([]);
+        setLoaded(true);
       });
   };
 
   useEffect(() => {
     loadImages();
   }, []);
+
+  // Intersection Observer — 滚动到底部时加载更多
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el || !hasMore) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisibleCount((prev) => Math.min(prev + PAGE_SIZE, allCards.length));
+        }
+      },
+      { rootMargin: "200px" }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasMore, allCards.length]);
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -109,13 +132,23 @@ export default function Home() {
         </label>
       </div>
 
-      {cards.length === 0 ? (
+      {!loaded ? (
         <div className="min-h-screen flex items-center justify-center">
           <p className="text-gray-400">加载中...</p>
         </div>
+      ) : visibleCards.length === 0 ? (
+        <div className="min-h-screen flex items-center justify-center">
+          <p className="text-gray-400">暂无图片</p>
+        </div>
       ) : (
         <div className="pt-12">
-          <LayoutGrid cards={cards} />
+          <LayoutGrid cards={visibleCards} />
+          {/* 哨兵元素：滚动到此处触发加载更多 */}
+          {hasMore && (
+            <div ref={sentinelRef} className="flex justify-center py-8">
+              <div className="w-6 h-6 border-2 border-zinc-600 border-t-transparent rounded-full animate-spin" />
+            </div>
+          )}
         </div>
       )}
     </div>
