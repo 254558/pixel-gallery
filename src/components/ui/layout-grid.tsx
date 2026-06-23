@@ -67,12 +67,22 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
               className="absolute bottom-4 left-4 text-zinc-400 text-xs font-mono select-none cursor-pointer hover:text-white transition-colors"
               onClick={(e) => {
                 e.stopPropagation();
-                navigator.clipboard.writeText(selectedName).then(() => {
-                  // 简单反馈：文字闪一下白色
+                const text = selectedName;
+                const ta = document.createElement("textarea");
+                ta.value = text;
+                ta.style.position = "fixed";
+                ta.style.opacity = "0";
+                document.body.appendChild(ta);
+                ta.select();
+                try {
+                  document.execCommand("copy");
                   const el = e.currentTarget;
-                  el.style.color = "#fff";
-                  setTimeout(() => { el.style.color = ""; }, 400);
-                });
+                  el.textContent = "✓ 已复制";
+                  setTimeout(() => { el.textContent = text; }, 800);
+                } catch {
+                  // ignore
+                }
+                document.body.removeChild(ta);
               }}
               title="点击复制文件名"
             >
