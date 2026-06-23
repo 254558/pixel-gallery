@@ -3,7 +3,7 @@ import "./globals.css";
 import "@/components/dotmatrix-loader.css";
 
 export const metadata: Metadata = {
-  title: "发呆像素",
+  title: "WanderPixel",
   description: "神游时收集的像素碎片",
   icons: {
     icon: "/favicon.png",
