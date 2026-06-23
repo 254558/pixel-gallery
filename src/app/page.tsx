@@ -1,7 +1,7 @@
 "use client";
 
 import { LayoutGrid } from "@/components/ui/layout-grid";
-import { DotmSquare1 } from "@/components/ui/loader/dotm-square-1";
+import { DotmSquare17 } from "@/components/ui/dotm-square-17";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const IMAGE_EXTS = [".png", ".jpg", ".jpeg", ".webp", ".gif"];
@@ -135,15 +135,13 @@ export default function Home() {
 
       {!loaded ? (
         <div className="min-h-screen flex items-center justify-center">
-          <DotmSquare1
-            size={140}
+          <DotmSquare17
+            size={160}
             dotSize={8}
-            speed={1.1}
-            pattern="full"
-            animated
-            opacityBase={0.12}
-            opacityMid={0.42}
-            opacityPeak={1}
+            speed={1.4}
+            opacityBase={0.1}
+            opacityMid={0.4}
+            opacityPeak={0.95}
             className="text-zinc-400"
           />
         </div>
