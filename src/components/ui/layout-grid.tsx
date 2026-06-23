@@ -43,9 +43,10 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
           onClick={close}
         >
           <img
-            src={selected}
+            src={`/api/enlarge?file=${encodeURIComponent(selected.replace(/^\//, ''))}&scale=3`}
             alt=""
             className="max-w-[95vw] max-h-[95vh] object-contain"
+            style={{ imageRendering: 'pixelated' }}
             onClick={(e) => {
               e.stopPropagation();
               close();
