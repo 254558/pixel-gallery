@@ -140,7 +140,7 @@ export default function AdminPage() {
         </div>
         <div className="relative z-10">
           <div className="bg-zinc-950 backdrop-blur-xl p-8 rounded-3xl border border-zinc-700">
-            <h1 className="text-white text-xl font-semibold mb-6 text-center">管理面板</h1>
+            
             <input
               type="password"
               placeholder="输入管理密码"
@@ -164,7 +164,7 @@ export default function AdminPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       <div className="max-w-7xl mx-auto p-6">
-        <h1 className="text-2xl font-bold mb-6 tracking-tight">管理面板</h1>
+        
 
         {actionMsg && (
           <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-zinc-900 border border-zinc-800 text-green-400 px-5 py-3 rounded-2xl shadow-2xl backdrop-blur-sm animate-in fade-in slide-in-from-top-2 duration-300">
