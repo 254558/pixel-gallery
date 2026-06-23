@@ -136,12 +136,9 @@ export default function Home() {
       {!loaded ? (
         <div className="min-h-screen flex items-center justify-center">
           <DotmSquare17
-            size={160}
-            dotSize={8}
-            speed={1.4}
-            opacityBase={0.1}
-            opacityMid={0.4}
-            opacityPeak={0.95}
+            size={24}
+            dotSize={3}
+            speed={1}
             className="text-zinc-400"
           />
         </div>
