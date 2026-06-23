@@ -10,6 +10,7 @@ type PendingItem = {
 type PublicImage = {
   name: string;
   url: string;
+  index: number;
 };
 
 export default function AdminPage() {
@@ -30,7 +31,7 @@ export default function AdminPage() {
     const numMatch = q.match(/^#(\d+)$/);
     if (numMatch) {
       const n = Number(numMatch[1]);
-      return publicImages.filter((_, i) => i + 1 === n);
+      return publicImages.filter((item) => item.index === n);
     }
     return publicImages.filter((item) =>
       item.name.toLowerCase().includes(q.toLowerCase())
@@ -291,7 +292,7 @@ export default function AdminPage() {
                     <div className="aspect-[4/3] bg-zinc-800 overflow-hidden relative">
                       {/* 序号角标 */}
                       <span className="absolute top-2 left-2 z-10 bg-black/60 text-zinc-300 text-xs font-mono px-1.5 py-0.5 rounded-md pointer-events-none">
-                        #{publicImages.indexOf(item) + 1}
+                        #{item.index}
                       </span>
                       <img
                         src={item.url}

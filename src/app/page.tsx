@@ -10,6 +10,7 @@ const PAGE_SIZE = 20;
 type ImageItem = {
   name: string;
   url: string;
+  index: number;
 };
 
 type Card = {
@@ -17,6 +18,7 @@ type Card = {
   content: string;
   className: string;
   thumbnail: string;
+  index: number;
 };
 
 export default function Home() {
@@ -41,11 +43,12 @@ export default function Home() {
           IMAGE_EXTS.some((ext) => item.name.toLowerCase().endsWith(ext))
         );
         setAllCards(
-          imgs.map((item, i) => ({
-            id: i + 1,
+          imgs.map((item) => ({
+            id: item.index,
             content: item.name,
             className: "",
             thumbnail: item.url,
+            index: item.index,
           }))
         );
         setLoaded(true);

@@ -6,6 +6,7 @@ type Card = {
   content: string;
   className: string;
   thumbnail: string;
+  index: number;
 };
 
 export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
@@ -45,9 +46,9 @@ export const LayoutGrid = ({ cards }: { cards: Card[] }) => {
           onClick={close}
         >
           <div className="relative flex items-center justify-center">
-            {/* 编号 —— 显示在图片左侧 */}
-            <div className="absolute left-[-60px] top-1/2 -translate-y-1/2 text-zinc-400 text-5xl font-bold select-none pointer-events-none">
-              #{selected.index + 1}
+            {/* 编号 */}
+            <div className="absolute -left-10 top-1/2 -translate-y-1/2 text-zinc-500 text-lg font-mono select-none pointer-events-none">
+              #{selected.index}
             </div>
             <img
               src={selected.src}

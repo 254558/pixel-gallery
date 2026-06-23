@@ -30,7 +30,7 @@ export async function GET() {
             name,
             url: `/${name}`,
           }))
-      );
+      ).map((item, i) => ({ ...item, index: i + 1 }));
       return NextResponse.json({ images });
     } catch {
       return NextResponse.json({ images: [] });
@@ -49,7 +49,7 @@ export async function GET() {
           name: b.pathname.replace("public/", ""),
           url: b.url,
         }))
-    );
+    ).map((item, i) => ({ ...item, index: i + 1 }));
     return NextResponse.json({ images });
   } catch {
     return NextResponse.json({ images: [] });
