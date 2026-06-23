@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 
 type PendingItem = {
   file: string;
@@ -12,6 +12,7 @@ export default function AdminPage() {
   const [password, setPassword] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
   const [actionMsg, setActionMsg] = useState("");
+  const pwRef = useRef("");
 
   const fetchPending = useCallback(async () => {
     try {
@@ -27,9 +28,16 @@ export default function AdminPage() {
     if (authenticated) fetchPending();
   }, [authenticated, fetchPending]);
 
-  // 检查环境变量是否设了密码
+  // 恢复 session 或检查是否无需密码
   useEffect(() => {
-    // 如果没有密码保护，直接进入
+    const saved = sessionStorage.getItem("admin_pw");
+    if (saved) {
+      pwRef.current = saved;
+      setPassword(saved);
+      setAuthenticated(true);
+      return;
+    }
+    // 没有密码保护，直接进入
     fetch("/api/pending")
       .then((res) => res.json())
       .then((data) => {
@@ -40,13 +48,15 @@ export default function AdminPage() {
   }, []);
 
   const handleLogin = async () => {
-    // 用 test-ping 验证密码
+    const pw = password;
     const res = await fetch("/api/review", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "x-admin-password": password },
+      headers: { "Content-Type": "application/json", "x-admin-password": pw },
       body: JSON.stringify({ action: "ping" }),
     });
     if (res.ok) {
+      sessionStorage.setItem("admin_pw", pw);
+      pwRef.current = pw;
       setAuthenticated(true);
     } else {
       alert("密码错误");
@@ -54,11 +64,12 @@ export default function AdminPage() {
   };
 
   const handleReview = async (file: string, action: "approve" | "reject") => {
+    const pw = sessionStorage.getItem("admin_pw") || pwRef.current || "";
     const res = await fetch("/api/review", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        ...(password ? { "x-admin-password": password } : {}),
+        "x-admin-password": pw,
       },
       body: JSON.stringify({ file, action }),
     });
