@@ -138,18 +138,18 @@ export default function AdminPage() {
           ))}
         </div>
         <div className="relative z-10">
-          <div className="bg-zinc-950 backdrop-blur-xl p-8 rounded-xl border border-zinc-700">
+          <div className="bg-zinc-950 backdrop-blur-xl p-8 rounded-3xl border border-zinc-700">
             <h1 className="text-white text-xl font-semibold mb-6 text-center">管理面板</h1>
             <input
               type="password"
               placeholder="输入管理密码"
-              className="bg-zinc-900/80 text-white px-4 py-2.5 rounded-lg w-full mb-4 border border-zinc-800 focus:border-zinc-500 focus:outline-none transition-colors"
+              className="bg-zinc-900/80 text-white px-4 py-2.5 rounded-2xl w-full mb-4 border border-zinc-800 focus:border-zinc-500 focus:outline-none transition-colors"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleLogin()}
             />
             <button
-              className="w-full bg-white text-black font-medium px-6 py-2.5 rounded-lg hover:bg-zinc-200 transition-colors"
+              className="w-full bg-white text-black font-medium px-6 py-2.5 rounded-2xl hover:bg-zinc-200 transition-colors"
               onClick={handleLogin}
             >
               进入
@@ -166,14 +166,14 @@ export default function AdminPage() {
         <h1 className="text-2xl font-bold mb-6 tracking-tight">管理面板</h1>
 
         {actionMsg && (
-          <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-zinc-900 border border-zinc-800 text-green-400 px-5 py-3 rounded-xl shadow-2xl backdrop-blur-sm animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-zinc-900 border border-zinc-800 text-green-400 px-5 py-3 rounded-2xl shadow-2xl backdrop-blur-sm animate-in fade-in slide-in-from-top-2 duration-300">
             {actionMsg}
           </div>
         )}
 
-        <div className="flex gap-1 mb-8 bg-zinc-900/50 rounded-xl p-1 w-fit border border-zinc-800/50 backdrop-blur-sm">
+        <div className="flex gap-1 mb-8 bg-zinc-900/50 rounded-2xl p-1 w-fit border border-zinc-800/50 backdrop-blur-sm">
           <button
-            className={["px-5 py-2 rounded-lg text-sm font-medium transition-all duration-200", tab === "pending" ? "bg-zinc-800 text-white shadow-lg" : "text-zinc-400 hover:text-white"].join(" ")}
+            className={["px-5 py-2 rounded-2xl text-sm font-medium transition-all duration-200", tab === "pending" ? "bg-zinc-800 text-white shadow-lg" : "text-zinc-400 hover:text-white"].join(" ")}
             onClick={() => setTab("pending")}
           >
             待审核
@@ -184,7 +184,7 @@ export default function AdminPage() {
             )}
           </button>
           <button
-            className={["px-5 py-2 rounded-lg text-sm font-medium transition-all duration-200", tab === "public" ? "bg-zinc-800 text-white shadow-lg" : "text-zinc-400 hover:text-white"].join(" ")}
+            className={["px-5 py-2 rounded-2xl text-sm font-medium transition-all duration-200", tab === "public" ? "bg-zinc-800 text-white shadow-lg" : "text-zinc-400 hover:text-white"].join(" ")}
             onClick={() => setTab("public")}
           >
             已公开
@@ -205,7 +205,7 @@ export default function AdminPage() {
                 {pending.map((item) => (
                   <div
                     key={item.file}
-                    className="group relative bg-zinc-900/50 rounded-2xl overflow-hidden border border-zinc-800/50 hover:border-zinc-700/50 transition-all duration-500"
+                    className="group relative bg-zinc-900/50 rounded-3xl overflow-hidden border border-zinc-800/50 hover:border-zinc-700/50 transition-all duration-500"
                   >
                     <div className="aspect-[4/3] bg-zinc-800 overflow-hidden">
                       <img
@@ -228,13 +228,13 @@ export default function AdminPage() {
 
                     <div className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all duration-500 scale-90 group-hover:scale-100">
                       <button
-                        className="bg-green-500/90 hover:bg-green-500 text-white text-sm font-medium px-5 py-2 rounded-xl backdrop-blur-sm transition-all hover:scale-105 active:scale-95"
+                        className="bg-green-500/90 hover:bg-green-500 text-white text-sm font-medium px-5 py-2 rounded-2xl backdrop-blur-sm transition-all hover:scale-105 active:scale-95"
                         onClick={() => handleReview(item.file, "approve")}
                       >
                         通过
                       </button>
                       <button
-                        className="bg-red-500/90 hover:bg-red-500 text-white text-sm font-medium px-5 py-2 rounded-xl backdrop-blur-sm transition-all hover:scale-105 active:scale-95"
+                        className="bg-red-500/90 hover:bg-red-500 text-white text-sm font-medium px-5 py-2 rounded-2xl backdrop-blur-sm transition-all hover:scale-105 active:scale-95"
                         onClick={() => handleReview(item.file, "reject")}
                       >
                         拒绝
@@ -258,7 +258,7 @@ export default function AdminPage() {
                 {publicImages.map((item) => (
                   <div
                     key={item.name}
-                    className="group relative bg-zinc-900/50 rounded-2xl overflow-hidden border border-zinc-800/50 hover:border-zinc-700/50 transition-all duration-500"
+                    className="group relative bg-zinc-900/50 rounded-3xl overflow-hidden border border-zinc-800/50 hover:border-zinc-700/50 transition-all duration-500"
                   >
                     <div className="aspect-[4/3] bg-zinc-800 overflow-hidden">
                       <img
@@ -278,7 +278,7 @@ export default function AdminPage() {
 
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 scale-90 group-hover:scale-100">
                       <button
-                        className="bg-white/10 hover:bg-red-500/80 backdrop-blur-md text-white text-sm font-medium px-6 py-2.5 rounded-xl border border-white/20 hover:border-red-400/50 transition-all hover:scale-105 active:scale-95"
+                        className="bg-white/10 hover:bg-red-500/80 backdrop-blur-md text-white text-sm font-medium px-6 py-2.5 rounded-2xl border border-white/20 hover:border-red-400/50 transition-all hover:scale-105 active:scale-95"
                         onClick={() => handleDelete(item.name)}
                       >
                         <span className="flex items-center gap-2">
